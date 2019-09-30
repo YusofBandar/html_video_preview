@@ -13,11 +13,21 @@ let getVideos = function(){
 
 let addHoverListeners = function(elements){
     elements.map(element => 
-        element.addEventListener("mouseover",function(){
-            console.log('hover');
-        })
-    )
+        element.addEventListener("mouseover",videoPlay)
+    );
 }
+
+let videoPlay = function(){
+    const video = this;
+    console.log(video);
+    video.play().then(function(){
+
+    }).catch(function(err){
+        console.log(err.name);
+    })
+}
+
+
 
 window.onload = function(){
     addHoverListeners(getVideos());
