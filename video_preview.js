@@ -17,13 +17,16 @@ let addThumbnails = function(elements){
 
 let renderThumbnail = function(videoPreview){
     let video = [... videoPreview.getElementsByTagName("video")];
-    if(video.length < 1) return;
     
+    if(video.length < 1) return;
     video = video[0];
-    let src = video.getAttribute("src");
+    
+    let frame = videoPreview.getAttribute("thumbnail-frame");
+    let sec = frame != null ? frame : 0;
 
+    let src = video.getAttribute("src");
     if(src != null){
-        getVideoImage(src,10,function(img){
+        getVideoImage(src,sec,function(img){
             if(img){
                 videoPreview.appendChild(img);
             }
@@ -66,8 +69,5 @@ let getVideoImage = function(path, secs, callback) {
 window.onload = function(){
     let videos = getVideos();
     addThumbnails(videos);
-    
-    
-    
 }
 
