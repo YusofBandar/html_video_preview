@@ -1,13 +1,5 @@
 let getVideos = function(){
-    let videos = [];
-
-    let videoEls = document.getElementsByTagName("video");  
-    for(let i=0;i<videoEls.length;i++){
-        if(videoEls[i].getAttribute('video-preview') != null){
-            videos.push(videoEls[i]);
-        }
-    }
-
+    let videos = [... document.getElementsByTagName("video-preview")];  
     return videos;
 }
 
@@ -18,11 +10,14 @@ let addHoverListeners = function(elements){
 }
 
 let videoPlay = function(){
-    const video = this;
-    console.log(video);
-    video.play().then(function(){
+    const videoPreview = this;
+    
+    let video = [... videoPreview.getElementsByTagName("video")];
+    if(video.length < 1) return;
+    
+    video = video[0];
 
-    }).catch(function(err){
+    video.play().catch(function(err){
         console.log(err.name);
     })
 }
