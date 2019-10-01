@@ -26,7 +26,6 @@ let addThumbnails = function (elements) {
         renderThumbnail(element));
 }
 
-
 let renderThumbnail = function (videoPreview) {
     let video = [...videoPreview.getElementsByTagName("video")];
 
@@ -41,9 +40,29 @@ let renderThumbnail = function (videoPreview) {
         getVideoImage(src, sec, function (img) {
             if (img) {
                 videoPreview.appendChild(img);
+                img.addEventListener('click',function(){
+                    thumbnailClick(videoPreview);
+                })
             }
         })
     }
+}
+
+let thumbnailClick = function (videoPreview){
+    let video = [...videoPreview.getElementsByTagName("video")];
+
+    if (video.length < 1) return;
+    video = video[0];
+
+    video.hidden = false;
+    video.play().catch(err => console.error(err));
+
+    let image = [...videoPreview.getElementsByTagName("img")];
+
+    if (image.length < 1) return;
+    image = image[0];
+
+    image.hidden = true;
 }
 
 
