@@ -43,9 +43,50 @@ let renderThumbnail = function (videoPreview) {
                 img.addEventListener('click',function(){
                     thumbnailClick(videoPreview);
                 })
+                img.addEventListener('mouseover',function(){
+                    thumbnailHover(videoPreview);
+                })
             }
         })
     }
+}
+
+let thumbnailHover = function (videoPreview){
+    let video = [...videoPreview.getElementsByTagName("video")];
+
+    if (video.length < 1) return;
+    video = video[0];
+
+    let frames = [];
+
+    let src = video.getAttribute("src");
+    if(src != null){
+
+        let frame = videoPreview.getAttribute("thumbnail-frame");
+        let sec = frame != null ? frame : 0;
+        getVideoImage(src,sec,function(img){
+            frames.push(img);
+        })
+
+        getVideoImage(src,10,function(img){
+           frames.push(img);
+        })
+    }
+
+    thumbnailAnimate();
+
+}
+
+let thumbnailAnimate = function(frames){
+
+        let i = 0;
+    
+        console.log(i);
+        i++;
+        setInterval(function(){
+            console.log(i % 5);
+            i++;
+        }, 2000);
 }
 
 let thumbnailClick = function (videoPreview){
