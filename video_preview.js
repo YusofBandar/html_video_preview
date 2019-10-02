@@ -3,18 +3,6 @@ let getVideos = function () {
     return videos;
 }
 
-let hideVideos = function (elements) {
-    elements.map(function (element) {
-        let video = [...element.getElementsByTagName("video")];
-
-        if (video.length < 1) return;
-        video = video[0];
-
-        video.hidden = true;
-    }
-    );
-}
-
 let addHoverListeners = function (elements) {
     elements.map(element =>
         element.addEventListener("mouseover", videoPlay)
@@ -27,22 +15,15 @@ let addThumbnails = function (elements) {
 }
 
 let renderThumbnail = function (videoPreview) {
-    let video = [...videoPreview.getElementsByTagName("video")];
-
-    if (video.length < 1) return;
-    video = video[0];
-
     let frame = videoPreview.getAttribute("thumbnail-frame");
+    
     let sec = frame != null ? frame : 0;
 
-    let src = video.getAttribute("src");
+    let src = videoPreview.getAttribute("src");
     if (src != null) {
         getVideoImage(src, sec, function (img) {
             if (img) {
                 videoPreview.appendChild(img);
-                img.addEventListener('click',function(){
-                    thumbnailClick(videoPreview);
-                })
                 img.addEventListener('mouseover',function(){
                     thumbnailHover(videoPreview);
                 })
@@ -52,14 +33,10 @@ let renderThumbnail = function (videoPreview) {
 }
 
 let thumbnailHover = function (videoPreview){
-    let video = [...videoPreview.getElementsByTagName("video")];
-
-    if (video.length < 1) return;
-    video = video[0];
 
     let frames = [];
 
-    let src = video.getAttribute("src");
+    let src = videoPreview.getAttribute("src");
     if(src != null){
 
         let frame = videoPreview.getAttribute("thumbnail-frame");
@@ -89,22 +66,7 @@ let thumbnailAnimate = function(frames){
         }, 2000);
 }
 
-let thumbnailClick = function (videoPreview){
-    let video = [...videoPreview.getElementsByTagName("video")];
 
-    if (video.length < 1) return;
-    video = video[0];
-
-    video.hidden = false;
-    video.play().catch(err => console.error(err));
-
-    let image = [...videoPreview.getElementsByTagName("img")];
-
-    if (image.length < 1) return;
-    image = image[0];
-
-    image.hidden = true;
-}
 
 
 
@@ -140,7 +102,6 @@ let getVideoImage = function (path, secs, callback) {
 
 window.onload = function () {
     let videos = getVideos();
-    hideVideos(videos);
     addThumbnails(videos);
 }
 
