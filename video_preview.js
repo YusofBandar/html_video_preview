@@ -26,6 +26,12 @@ let renderThumbnail = function (videoPreview) {
     }
 }
 
+let getFrameAttributes = function(videoPreview){
+    let frames = videoPreview.getAttribute('frames');
+    frames = frames != null ? frames.split(',') : [0];
+    return frames;
+}
+
 let addHoverListener = function(videoPreview){
     videoPreview.addEventListener('mouseover', function _thumbnailHover() {
         thumbnailHover(videoPreview);
@@ -46,7 +52,7 @@ let thumbnailHover = function (videoPreview) {
 
     let src = videoPreview.getAttribute("src");
     if (src != null) {
-        let psudoFrames = [10,70,60,80,100]; 
+        let psudoFrames = getFrameAttributes(videoPreview); 
         
         let thumbnail = videoPreview.getElementsByTagName('img')[0];
         thumbnail.setAttribute('frame',0);
