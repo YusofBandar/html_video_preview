@@ -92,13 +92,16 @@ let thumbnailLeave = function(videoPreview,animation){
 }
 
 let thumbnailAnimate = function (videoPreview,numFrames) {
+    let animationSpeed = videoPreview.getAttribute('animation-speed');
+    animationSpeed = animationSpeed != null ? animationSpeed : 1000;
+
     let i = 0;
     let animation = setInterval(function () {
         (videoPreview.getElementsByTagName('img'))[i].hidden = true;
         i++;
         i = i%(numFrames+1);
         (videoPreview.getElementsByTagName('img'))[i].hidden = false;   
-    }, 1000);
+    }, animationSpeed);
     return animation;
 }
 
