@@ -38,31 +38,39 @@ let thumbnailHover = function (videoPreview) {
 
     let src = videoPreview.getAttribute("src");
     if (src != null) {
-        let psudoFrames = [1,2,3,4,5]; 
+        let psudoFrames = [1,20,30,40,50]; 
         
-        var result = Promise.resolve();
+        let thumbnail = videoPreview.getElementsByTagName('img')[0];
+        thumbnail.setAttribute('frame',0);
+        
         psudoFrames.forEach(frame => {
-            result = result.then(() => getVideoImage(src,frame));
-            images.push(result);
+            images.push(getVideoImage(src,frame));
         });
 
-        console.log('done');
-        console.log(images);
+        Promise.all(images).then(function(v){
+            v.forEach((frame,index) => {
+                frame.setAttribute('frame',index+1);
+                frame.hidden = true;
+                videoPreview.appendChild(frame);
+            });
+        })
     }
 
-    thumbnailAnimate();
+    thumbnailAnimate(videoPreview);
 
 }
 
-let thumbnailAnimate = function (frames) {
+let thumbnailAnimate = function (videoPreview) {
 
     let i = 0;
-
-    console.log(i);
-    i++;
     setInterval(function () {
-        console.log(i % 5);
+        (videoPreview.getElementsByTagName('img'))[i].hidden = true;
+        console.log('hiding',i);
         i++;
+        i = i%6;
+        (videoPreview.getElementsByTagName('img'))[i].hidden = false;
+        console.log('showing',i)
+        
     }, 2000);
 }
 
