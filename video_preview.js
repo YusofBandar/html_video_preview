@@ -18,14 +18,26 @@ let renderThumbnail = function (videoPreview) {
 
         getVideoImage(src, sec).then((img) => {
             videoPreview.appendChild(img);
-            videoPreview.addEventListener('mouseover', function _thumbnailHover() {
-                thumbnailHover(videoPreview);
-                videoPreview.removeEventListener('mouseover',_thumbnailHover);
-            })
+            addHoverListener(videoPreview);
         }).catch(err => {
             console.error(err);
         })
     }
+}
+
+let addHoverListener = function(videoPreview){
+    videoPreview.addEventListener('mouseover', function _thumbnailHover() {
+        thumbnailHover(videoPreview);
+        videoPreview.removeEventListener('mouseover',_thumbnailHover);
+    })
+}
+
+let removeHoverListener = function(videoPreview,animationId){
+    videoPreview.addEventListener("mouseleave",function _thumbnailLeave(){
+        thumbnailLeave(videoPreview,animationId);
+        videoPreview.removeEventListener('mouseleave',_thumbnailLeave);
+        addHoverListener(videoPreview);
+    });
 }
 
 let thumbnailHover = function (videoPreview) {
@@ -50,17 +62,7 @@ let thumbnailHover = function (videoPreview) {
             });
 
             let animationId = thumbnailAnimate(videoPreview,psudoFrames.length);
-            videoPreview.addEventListener("mouseleave",function(){
-                thumbnailLeave(videoPreview,animationId);
-
-                videoPreview.addEventListener('mouseover', function _thumbnailHover() {
-                    thumbnailHover(videoPreview);
-                    videoPreview.removeEventListener('mouseover',_thumbnailHover);
-                })
-            });
-            
-
-            
+            removeHoverListener(videoPreview,animationId);  
         })
     }
 }
