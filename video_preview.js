@@ -67,12 +67,19 @@ let thumbnailHover = function (videoPreview) {
 
 let thumbnailLeave = function(videoPreview,animation){
     clearInterval(animation);
-    let frames = videoPreview.getElementsByTagName('img');
-    frames[0].hidden = false;
+    let frames = [...videoPreview.getElementsByTagName('img')];
     
+    for(let i=1;i<frames.length;i++){
+        frames[i].hidden = true;
+    }
+
+    frames[0].hidden = false;
+
     for(let i=1;i<frames.length;i++){
         frames[i].remove();
     }
+    
+    
 }
 
 let thumbnailAnimate = function (videoPreview,numFrames) {
