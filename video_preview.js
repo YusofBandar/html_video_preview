@@ -38,7 +38,7 @@ let thumbnailHover = function (videoPreview) {
 
     let src = videoPreview.getAttribute("src");
     if (src != null) {
-        let psudoFrames = [1,20,30,40,50]; 
+        let psudoFrames = [10,70,60,80,100]; 
         
         let thumbnail = videoPreview.getElementsByTagName('img')[0];
         thumbnail.setAttribute('frame',0);
@@ -53,21 +53,25 @@ let thumbnailHover = function (videoPreview) {
                 frame.hidden = true;
                 videoPreview.appendChild(frame);
             });
+
+            thumbnailAnimate(videoPreview,psudoFrames.length);
         })
+
+       
     }
 
-    thumbnailAnimate(videoPreview);
+  
 
 }
 
-let thumbnailAnimate = function (videoPreview) {
+let thumbnailAnimate = function (videoPreview,numFrames) {
     let i = 0;
     setInterval(function () {
         (videoPreview.getElementsByTagName('img'))[i].hidden = true;
         i++;
-        i = i%6;
+        i = i%(numFrames+1);
         (videoPreview.getElementsByTagName('img'))[i].hidden = false;   
-    }, 2000);
+    }, 1000);
 }
 
 
