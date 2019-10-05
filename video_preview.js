@@ -3,12 +3,6 @@ let getVideos = function () {
     return videos;
 }
 
-let addHoverListeners = function (elements) {
-    elements.map(element =>
-        element.addEventListener("mouseover", videoPlay)
-    );
-}
-
 let addThumbnails = function (elements) {
     elements.map(element =>
         renderThumbnail(element));
