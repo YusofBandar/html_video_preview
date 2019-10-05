@@ -61,16 +61,12 @@ let thumbnailHover = function (videoPreview) {
 }
 
 let thumbnailAnimate = function (videoPreview) {
-
     let i = 0;
     setInterval(function () {
         (videoPreview.getElementsByTagName('img'))[i].hidden = true;
-        console.log('hiding',i);
         i++;
         i = i%6;
-        (videoPreview.getElementsByTagName('img'))[i].hidden = false;
-        console.log('showing',i)
-        
+        (videoPreview.getElementsByTagName('img'))[i].hidden = false;   
     }, 2000);
 }
 
