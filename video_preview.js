@@ -49,25 +49,31 @@ let thumbnailHover = function (videoPreview) {
                 videoPreview.appendChild(frame);
             });
 
+            let animationId = thumbnailAnimate(videoPreview,psudoFrames.length);
+            videoPreview.addEventListener("mouseleave",function(){
+                thumbnailLeave(animationId);
+            });
             
-            thumbnailAnimate(videoPreview,psudoFrames.length);
+
+            
         })
-
-       
     }
+}
 
-  
-
+let thumbnailLeave = function(animation){
+    console.log('no way')
+    clearInterval(animation);
 }
 
 let thumbnailAnimate = function (videoPreview,numFrames) {
     let i = 0;
-    setInterval(function () {
+    let animation = setInterval(function () {
         (videoPreview.getElementsByTagName('img'))[i].hidden = true;
         i++;
         i = i%(numFrames+1);
         (videoPreview.getElementsByTagName('img'))[i].hidden = false;   
     }, 1000);
+    return animation;
 }
 
 
