@@ -18,8 +18,9 @@ let renderThumbnail = function (videoPreview) {
 
         getVideoImage(src, sec).then((img) => {
             videoPreview.appendChild(img);
-            img.addEventListener('mouseover', function () {
+            videoPreview.addEventListener('mouseover', function _thumbnailHover() {
                 thumbnailHover(videoPreview);
+                videoPreview.removeEventListener('mouseover',_thumbnailHover);
             })
         }).catch(err => {
             console.error(err);
@@ -48,6 +49,7 @@ let thumbnailHover = function (videoPreview) {
                 videoPreview.appendChild(frame);
             });
 
+            
             thumbnailAnimate(videoPreview,psudoFrames.length);
         })
 
