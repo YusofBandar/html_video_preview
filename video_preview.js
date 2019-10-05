@@ -4,8 +4,9 @@ let getVideos = function () {
 }
 
 let addThumbnails = function (elements) {
-    elements.map(element =>
-        renderThumbnail(element));
+    elements.forEach(element => {
+        renderThumbnail(element);
+    });
 }
 
 let renderThumbnail = function (videoPreview) {
