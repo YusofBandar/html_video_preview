@@ -51,7 +51,12 @@ let thumbnailHover = function (videoPreview) {
 
             let animationId = thumbnailAnimate(videoPreview,psudoFrames.length);
             videoPreview.addEventListener("mouseleave",function(){
-                thumbnailLeave(animationId);
+                thumbnailLeave(videoPreview,animationId);
+
+                videoPreview.addEventListener('mouseover', function _thumbnailHover() {
+                    thumbnailHover(videoPreview);
+                    videoPreview.removeEventListener('mouseover',_thumbnailHover);
+                })
             });
             
 
@@ -60,9 +65,14 @@ let thumbnailHover = function (videoPreview) {
     }
 }
 
-let thumbnailLeave = function(animation){
-    console.log('no way')
+let thumbnailLeave = function(videoPreview,animation){
     clearInterval(animation);
+    let frames = videoPreview.getElementsByTagName('img');
+    frames[0].hidden = false;
+    
+    for(let i=1;i<frames.length;i++){
+        frames[i].remove();
+    }
 }
 
 let thumbnailAnimate = function (videoPreview,numFrames) {
