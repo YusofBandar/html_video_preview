@@ -26,72 +26,95 @@ let renderThumbnail = function (videoPreview) {
     }
 }
 
-let getFrameAttributes = function(videoPreview){
+let getFrameAttributes = function (videoPreview) {
     let frames = videoPreview.getAttribute('frames');
     frames = frames != null ? frames.split(',') : [0];
     return frames;
 }
 
-let addHoverListener = function(videoPreview){
+let addHoverListener = function (videoPreview) {
     videoPreview.addEventListener('mouseover', function _thumbnailHover() {
         thumbnailHover(videoPreview);
-        videoPreview.removeEventListener('mouseover',_thumbnailHover);
+        videoPreview.removeEventListener('mouseover', _thumbnailHover);
     })
 }
 
-let removeHoverListener = function(videoPreview,animationId){
-    videoPreview.addEventListener("mouseleave",function _thumbnailLeave(){
-        thumbnailLeave(videoPreview,animationId);
-        videoPreview.removeEventListener('mouseleave',_thumbnailLeave);
+let removeHoverListener = function (videoPreview, animationId) {
+    videoPreview.addEventListener("mouseleave", function _thumbnailLeave() {
+        thumbnailLeave(videoPreview, animationId);
+        videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
         addHoverListener(videoPreview);
     });
 }
 
 let thumbnailHover = function (videoPreview) {
+    let mouseLeft = false;
+
+    let _thumbnailLeave = function (){
+        thumbnailLeave(videoPreview, null);
+        videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
+        addHoverListener(videoPreview);
+
+        mouseLeft = true;
+    }
+
+    /* adds early event listener if user moves cursor off thumbnail
+       before promises are all resolved
+    */ 
+    videoPreview.addEventListener("mouseleave", _thumbnailLeave)
+
+    
+
     let images = [];
 
     let src = videoPreview.getAttribute("src");
     if (src != null) {
-        let psudoFrames = getFrameAttributes(videoPreview); 
-        
+        let psudoFrames = getFrameAttributes(videoPreview);
+
         let thumbnail = videoPreview.getElementsByTagName('img')[0];
-        thumbnail.setAttribute('frame',0);
-        
+        thumbnail.setAttribute('frame', 0);
+
         psudoFrames.forEach(frame => {
-            images.push(getVideoImage(src,frame));
+            images.push(getVideoImage(src, frame));
         });
 
-        Promise.all(images).then(function(v){
-            v.forEach((frame,index) => {
-                frame.setAttribute('frame',index+1);
+      
+
+        Promise.all(images).then(function (v) {
+            v.forEach((frame, index) => {
+                frame.setAttribute('frame', index + 1);
                 frame.hidden = true;
                 videoPreview.appendChild(frame);
             });
 
-            let animationId = thumbnailAnimate(videoPreview,psudoFrames.length);
-            removeHoverListener(videoPreview,animationId);  
+            if (!mouseLeft) {
+                let animationId = thumbnailAnimate(videoPreview, psudoFrames.length);
+                videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
+                removeHoverListener(videoPreview, animationId);
+            }
+
         })
     }
 }
 
-let thumbnailLeave = function(videoPreview,animation){
+let thumbnailLeave = function (videoPreview, animation) {
     clearInterval(animation);
     let frames = [...videoPreview.getElementsByTagName('img')];
-    
-    for(let i=1;i<frames.length;i++){
+
+    for (let i = 1; i < frames.length; i++) {
         frames[i].hidden = true;
     }
 
     frames[0].hidden = false;
 
-    for(let i=1;i<frames.length;i++){
+    for (let i = 1; i < frames.length; i++) {
         frames[i].remove();
     }
-    
-    
+
+
 }
 
-let thumbnailAnimate = function (videoPreview,numFrames) {
+let thumbnailAnimate = function (videoPreview, numFrames) {
     let animationSpeed = videoPreview.getAttribute('animation-speed');
     animationSpeed = animationSpeed != null ? animationSpeed : 1000;
 
@@ -99,8 +122,8 @@ let thumbnailAnimate = function (videoPreview,numFrames) {
     let animation = setInterval(function () {
         (videoPreview.getElementsByTagName('img'))[i].hidden = true;
         i++;
-        i = i%(numFrames+1);
-        (videoPreview.getElementsByTagName('img'))[i].hidden = false;   
+        i = i % (numFrames + 1);
+        (videoPreview.getElementsByTagName('img'))[i].hidden = false;
     }, animationSpeed);
     return animation;
 }
