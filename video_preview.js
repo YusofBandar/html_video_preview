@@ -18,6 +18,7 @@ let renderThumbnail = function (videoPreview) {
     if (src != null) {
 
         getVideoImage(src, sec).then((img) => {
+            img.setAttribute('style','width: inherit height: inherit');
             videoPreview.appendChild(img);
             addHoverListener(videoPreview);
         }).catch(err => {
@@ -85,6 +86,7 @@ let thumbnailHover = function (videoPreview) {
         let psudoFrames = getFrameAttributes(videoPreview);
 
         let thumbnail = videoPreview.getElementsByTagName('img')[0];
+        thumbnail.setAttribute('style','width: inherit height: inherit');
         thumbnail.setAttribute('frame', 0);
 
         psudoFrames.forEach(frame => {
@@ -96,6 +98,7 @@ let thumbnailHover = function (videoPreview) {
         Promise.all(images).then(function (v) {
             v.forEach((frame, index) => {
                 frame.setAttribute('frame', index + 1);
+                frame.setAttribute('style','width: inherit height: inherit');
                 frame.hidden = true;
                 videoPreview.appendChild(frame);
             });
