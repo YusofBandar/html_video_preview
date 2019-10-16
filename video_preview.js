@@ -41,9 +41,9 @@ class ThumbnailHover {
     }
 
 
-    getFrameAttributes(videoPreview) {
+    videoFrameVals(videoPreview) {
         let frames = videoPreview.getAttribute('frames');
-        frames = frames != null ? frames.split(',') : [0];
+        frames = frames ? frames.split(',') : [0];
         return frames;
     }
 
@@ -133,7 +133,7 @@ class ThumbnailHover {
 
         let src = videoPreview.getAttribute("src");
         if (src != null) {
-            let psudoFrames = this.getFrameAttributes(videoPreview);
+            let psudoFrames = this.videoFrameVals(videoPreview);
 
             let thumbnail = videoPreview.getElementsByTagName('img')[0];
             this.setStyleAttribute(thumbnail,this.styles);
