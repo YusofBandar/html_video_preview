@@ -13,6 +13,7 @@ class ThumbnailHover {
     constructor(videoPreview) {
         this.videoPreview = videoPreview;
         this.counter = 0;
+        this.styles = "width: inherit; height: inherit;";
     }
 
     Init() {
@@ -27,12 +28,16 @@ class ThumbnailHover {
 
     renderThumbnail(src, sec) {
         this.getVideoImage(src, sec).then((img) => {
-            img.setAttribute('style', 'width: inherit height: inherit');
+            this.setStyleAttribute(img,this.styles);
             this.videoPreview.appendChild(img);
             this.addHoverListener(this.videoPreview);
         }).catch(err => {
             console.error(err);
         })
+    }
+
+    setStyleAttribute(element,styles){
+        element.setAttribute('style', styles);
     }
 
 
@@ -131,7 +136,7 @@ class ThumbnailHover {
             let psudoFrames = this.getFrameAttributes(videoPreview);
 
             let thumbnail = videoPreview.getElementsByTagName('img')[0];
-            thumbnail.setAttribute('style', 'width: inherit height: inherit');
+            this.setStyleAttribute(thumbnail,this.styles);
             thumbnail.setAttribute('frame', 0);
 
             psudoFrames.forEach(frame => {
@@ -143,7 +148,7 @@ class ThumbnailHover {
             Promise.all(images).then(function (v) {
                 v.forEach((frame, index) => {
                     frame.setAttribute('frame', index + 1);
-                    frame.setAttribute('style', 'width: inherit height: inherit');
+                    self.setStyleAttribute(frame,self.styles);
                     frame.hidden = true;
                     videoPreview.appendChild(frame);
                 });
