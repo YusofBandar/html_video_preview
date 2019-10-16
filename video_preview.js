@@ -26,31 +26,31 @@ class ThumbnailHover {
             this.getVideoImage(src, sec).then((img) => {
                 img.setAttribute('style', 'width: inherit height: inherit');
                 this.videoPreview.appendChild(img);
-                this.addHoverListener();
+                this.addHoverListener(this.videoPreview);
             }).catch(err => {
                 console.error(err);
             })
         }
     }
 
-    getFrameAttributes() {
-        let frames = this.videoPreview.getAttribute('frames');
+    getFrameAttributes(videoPreview) {
+        let frames = videoPreview.getAttribute('frames');
         frames = frames != null ? frames.split(',') : [0];
         return frames;
     }
 
-    addHoverListener() {
+    addHoverListener(videoPreview) {
         const self = this;
         if (!this.mobileCheck()) {
-            this.videoPreview.addEventListener('mouseover', function _thumbnailHover() {
-                self.thumbnailHover();
-                self.videoPreview.removeEventListener('mouseover', _thumbnailHover);
+            videoPreview.addEventListener('mouseover', function _thumbnailHover() {
+                self.thumbnailHover(videoPreview);
+                videoPreview.removeEventListener('mouseover', _thumbnailHover);
             });
         } else {
 
-            this.videoPreview.addEventListener('touchstart', function _thumbnailHover() {
+            videoPreview.addEventListener('touchstart', function _thumbnailHover() {
                 requestAnimationFrame(self.timer.bind(self));
-                self.videoPreview.removeEventListener('touchstart', _thumbnailHover);
+                videoPreview.removeEventListener('touchstart', _thumbnailHover);
 
             });
         }
@@ -61,27 +61,27 @@ class ThumbnailHover {
             this.timerID = requestAnimationFrame(this.timer.bind(this));
             this.counter++;
         } else {
-            this.thumbnailHover();
+            this.thumbnailHover(this.videoPreview);
         }
     }
 
-    removeHoverListener(animationId) {
+    removeHoverListener(videoPreview,animationId) {
         const self = this;
 
         if(!this.mobileCheck()){
-            this.videoPreview.addEventListener("mouseleave", function _thumbnailLeave() {
-                self.thumbnailLeave(animationId);
-                self.videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
-                self.addHoverListener();
+            videoPreview.addEventListener("mouseleave", function _thumbnailLeave() {
+                self.thumbnailLeave(videoPreview,animationId);
+                videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
+                self.addHoverListener(videoPreview);
             });
         }else{
-            this.videoPreview.addEventListener("touchend", function _thumbnailLeave() {
+            videoPreview.addEventListener("touchend", function _thumbnailLeave() {
                 cancelAnimationFrame(self.timerID);
                 self.counter = 0;
 
-                self.thumbnailLeave(animationId);
-                self.videoPreview.removeEventListener("touchend", _thumbnailLeave);
-                self.addHoverListener();
+                self.thumbnailLeave(videoPreview,animationId);
+                videoPreview.removeEventListener("touchend", _thumbnailLeave);
+                self.addHoverListener(videoPreview);
             });
 
         }
@@ -89,13 +89,13 @@ class ThumbnailHover {
        
     }
 
-    thumbnailHover() {
+    thumbnailHover(videoPreview) {
         let mouseLeft = false;
         const self = this;
         let _thumbnailLeave = function () {
-            self.thumbnailLeave();
-            self.videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
-            self.addHoverListener();
+            self.thumbnailLeave(videoPreview);
+            videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
+            self.addHoverListener(videoPreview);
             mouseLeft = true;
         }
 
@@ -103,9 +103,9 @@ class ThumbnailHover {
             cancelAnimationFrame(self.timerID);
             counter = 0;
 
-            self.thumbnailLeave(animationId);
-            self.videoPreview.removeEventListener("touchend", _thumbnailLeave);
-            self.addHoverListener();
+            self.thumbnailLeave(videoPreview,animationId);
+            videoPreview.removeEventListener("touchend", _thumbnailLeave);
+            self.addHoverListener(videoPreview);
         }
 
         /* adds early event listener if user moves cursor off thumbnail
@@ -113,9 +113,9 @@ class ThumbnailHover {
         */
 
         if(!this.mobileCheck()){
-            this.videoPreview.addEventListener("mouseleave", _thumbnailLeave)
+            videoPreview.addEventListener("mouseleave", _thumbnailLeave)
         }else{
-            this.videoPreview.addEventListener("touchend", _thumbnailLeaveMob)
+            videoPreview.addEventListener("touchend", _thumbnailLeaveMob)
         }
         
 
@@ -123,11 +123,11 @@ class ThumbnailHover {
 
         let images = [];
 
-        let src = this.videoPreview.getAttribute("src");
+        let src = videoPreview.getAttribute("src");
         if (src != null) {
-            let psudoFrames = this.getFrameAttributes();
+            let psudoFrames = this.getFrameAttributes(videoPreview);
 
-            let thumbnail = this.videoPreview.getElementsByTagName('img')[0];
+            let thumbnail = videoPreview.getElementsByTagName('img')[0];
             thumbnail.setAttribute('style', 'width: inherit height: inherit');
             thumbnail.setAttribute('frame', 0);
 
@@ -142,23 +142,23 @@ class ThumbnailHover {
                     frame.setAttribute('frame', index + 1);
                     frame.setAttribute('style', 'width: inherit height: inherit');
                     frame.hidden = true;
-                    self.videoPreview.appendChild(frame);
+                    videoPreview.appendChild(frame);
                 });
 
                 if (!mouseLeft) {
-                    let animationId = self.thumbnailAnimate(psudoFrames.length);
-                    self.videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
-                    self.videoPreview.removeEventListener('touchend', _thumbnailLeaveMob);
-                    self.removeHoverListener(animationId);
+                    let animationId = self.thumbnailAnimate(videoPreview,psudoFrames.length);
+                    videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
+                    videoPreview.removeEventListener('touchend', _thumbnailLeaveMob);
+                    self.removeHoverListener(videoPreview,animationId);
                 }
 
             })
         }
     }
 
-    thumbnailLeave(animation) {
+    thumbnailLeave(videoPreview,animation) {
         clearInterval(animation);
-        let frames = [...this.videoPreview.getElementsByTagName('img')];
+        let frames = [...videoPreview.getElementsByTagName('img')];
 
         for (let i = 1; i < frames.length; i++) {
             frames[i].hidden = true;
@@ -171,17 +171,17 @@ class ThumbnailHover {
         }
     }
 
-    thumbnailAnimate(numFrames) {
+    thumbnailAnimate(videoPreview,numFrames) {
         const self = this;
-        let animationSpeed = this.videoPreview.getAttribute('animation-speed');
+        let animationSpeed = videoPreview.getAttribute('animation-speed');
         animationSpeed = animationSpeed != null ? animationSpeed : 1000;
 
         let i = 0;
         let animation = setInterval(function () {
-            (self.videoPreview.getElementsByTagName('img'))[i].hidden = true;
+            (videoPreview.getElementsByTagName('img'))[i].hidden = true;
             i++;
             i = i % (numFrames + 1);
-            (self.videoPreview.getElementsByTagName('img'))[i].hidden = false;
+            (videoPreview.getElementsByTagName('img'))[i].hidden = false;
         }, animationSpeed);
         return animation;
     }
