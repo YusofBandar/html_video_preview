@@ -24,7 +24,7 @@ Use the `<video-preview> </video-preview>` element with necessary attributes.
 
 **`thumbnail-frame`**
 
- 	The video frame used a thumbnail 
+ The video frame used a thumbnail 
 
 **`frames`**
 
