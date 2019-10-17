@@ -57,7 +57,7 @@ class ThumbnailHover {
 
         const _thumbnailTouch = () => {
             requestAnimationFrame(self.timer.bind(self));
-            videoPreview.removeEventListener('touchstart', _thumbnailHover);
+            videoPreview.removeEventListener('touchstart', _thumbnailTouch);
         }
 
         if (!this.mobileCheck()) {
