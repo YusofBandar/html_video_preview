@@ -101,21 +101,20 @@ class ThumbnailHover {
 
     thumbnailHover(videoPreview) {
         let mouseLeft = false;
-        const self = this;
-        let _thumbnailLeave = function () {
-            self.thumbnailLeave(videoPreview);
+        let _thumbnailLeave = () => {
+            this.thumbnailLeave(videoPreview);
             videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
-            self.addHoverListener(videoPreview);
+            this.addHoverListener(videoPreview);
             mouseLeft = true;
         }
 
-        let _thumbnailLeaveMob = function () {
-            cancelAnimationFrame(self.timerID);
-            self.counter = 0;
+        let _thumbnailTouchEnd = () => {
+            cancelAnimationFrame(this.timerID);
+            this.counter = 0;
 
-            self.thumbnailLeave(videoPreview, animationId);
-            videoPreview.removeEventListener("touchend", _thumbnailLeave);
-            self.addHoverListener(videoPreview);
+            this.thumbnailLeave(videoPreview, animationId);
+            videoPreview.removeEventListener("touchend", _thumbnailTouchEnd);
+            this.addHoverListener(videoPreview);
         }
 
         /* adds early event listener if user moves cursor off thumbnail
@@ -125,11 +124,8 @@ class ThumbnailHover {
         if (!this.mobileCheck()) {
             videoPreview.addEventListener("mouseleave", _thumbnailLeave)
         } else {
-            videoPreview.addEventListener("touchend", _thumbnailLeaveMob)
+            videoPreview.addEventListener("touchend", _thumbnailTouchEnd)
         }
-
-
-
 
         let images = [];
 
@@ -145,23 +141,20 @@ class ThumbnailHover {
                 images.push(this.getVideoImage(src, frame));
             });
 
-
-
-            Promise.all(images).then(function (v) {
+            Promise.all(images).then((v) => {
                 v.forEach((frame, index) => {
                     frame.setAttribute('frame', index + 1);
-                    self.setStyleAttribute(frame, self.styles);
+                    this.setStyleAttribute(frame, this.styles);
                     frame.hidden = true;
                     videoPreview.appendChild(frame);
                 });
 
                 if (!mouseLeft) {
-                    let animationId = self.thumbnailAnimate(videoPreview, psudoFrames.length);
+                    let animationId = this.thumbnailAnimate(videoPreview, psudoFrames.length);
                     videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
-                    videoPreview.removeEventListener('touchend', _thumbnailLeaveMob);
-                    self.removeHoverListener(videoPreview, animationId);
+                    videoPreview.removeEventListener('touchend', _thumbnailTouchEnd);
+                    this.removeHoverListener(videoPreview, animationId);
                 }
-
             })
         }
     }
