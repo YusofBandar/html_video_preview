@@ -2,7 +2,13 @@
 
 Html_video_preview is JavaScript library to preview videos bypassing browsers auto-play block. Html_video_preview is light weight and has 0 dependencies.
 
+## Example
 
+`<video-preview thumbnail-frame=50 frames="10,70,60,80,100" frame-speed="200" src="./black_sabbath_live.mp4">`
+
+<p align="center">
+  <img src="https://github.com/YusofBandar/html_video_preview/blob/master/example.gif">
+</p>
 
 ## Usage   
 
@@ -31,6 +37,3 @@ Use the `<video-preview> </video-preview>` element with necessary attributes.
 
 
 
-## Example
-
-`<video-preview thumbnail-frame=50 frames="10,70,60,80,100" frame-speed="200" src="./black_sabbath_live.mp4">`
