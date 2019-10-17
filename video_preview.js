@@ -28,7 +28,7 @@ class ThumbnailHover {
 
     renderThumbnail(src, sec) {
         this.getVideoImage(src, sec).then((img) => {
-            this.setStyleAttribute(img,this.styles);
+            this.setStyleAttribute(img, this.styles);
             this.videoPreview.appendChild(img);
             this.addHoverListener(this.videoPreview);
         }).catch(err => {
@@ -36,7 +36,7 @@ class ThumbnailHover {
         })
     }
 
-    setStyleAttribute(element,styles){
+    setStyleAttribute(element, styles) {
         element.setAttribute('style', styles);
     }
 
@@ -49,16 +49,21 @@ class ThumbnailHover {
 
     addHoverListener(videoPreview) {
         const self = this;
+
+        const _thumbnailHover = () => {
+            this.thumbnailHover(videoPreview);
+            videoPreview.removeEventListener('mouseover', _thumbnailHover);
+        }
+
+        const _thumbnailHoverMob = () => {
+            requestAnimationFrame(self.timer.bind(self));
+            videoPreview.removeEventListener('touchstart', _thumbnailHover);
+        }
+
         if (!this.mobileCheck()) {
-            videoPreview.addEventListener('mouseover', function _thumbnailHover() {
-                self.thumbnailHover(videoPreview);
-                videoPreview.removeEventListener('mouseover', _thumbnailHover);
-            });
+            videoPreview.addEventListener('mouseover', _thumbnailHover);
         } else {
-            videoPreview.addEventListener('touchstart', function _thumbnailHover() {
-                requestAnimationFrame(self.timer.bind(self));
-                videoPreview.removeEventListener('touchstart', _thumbnailHover);
-            });
+            videoPreview.addEventListener('touchstart', _thumbnailHoverMob);
         }
     }
 
@@ -134,7 +139,7 @@ class ThumbnailHover {
             let psudoFrames = this.videoFrameVals(videoPreview);
 
             let thumbnail = videoPreview.getElementsByTagName('img')[0];
-            this.setStyleAttribute(thumbnail,this.styles);
+            this.setStyleAttribute(thumbnail, this.styles);
             thumbnail.setAttribute('frame', 0);
 
             psudoFrames.forEach(frame => {
@@ -146,7 +151,7 @@ class ThumbnailHover {
             Promise.all(images).then(function (v) {
                 v.forEach((frame, index) => {
                     frame.setAttribute('frame', index + 1);
-                    self.setStyleAttribute(frame,self.styles);
+                    self.setStyleAttribute(frame, self.styles);
                     frame.hidden = true;
                     videoPreview.appendChild(frame);
                 });
