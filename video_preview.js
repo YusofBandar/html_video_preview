@@ -55,11 +55,9 @@ class ThumbnailHover {
                 videoPreview.removeEventListener('mouseover', _thumbnailHover);
             });
         } else {
-
             videoPreview.addEventListener('touchstart', function _thumbnailHover() {
                 requestAnimationFrame(self.timer.bind(self));
                 videoPreview.removeEventListener('touchstart', _thumbnailHover);
-
             });
         }
     }
@@ -109,7 +107,7 @@ class ThumbnailHover {
 
         let _thumbnailLeaveMob = function () {
             cancelAnimationFrame(self.timerID);
-            counter = 0;
+            self.counter = 0;
 
             self.thumbnailLeave(videoPreview, animationId);
             videoPreview.removeEventListener("touchend", _thumbnailLeave);
@@ -180,7 +178,6 @@ class ThumbnailHover {
     }
 
     thumbnailAnimate(videoPreview, numFrames) {
-        const self = this;
         let animationSpeed = videoPreview.getAttribute('animation-speed');
         animationSpeed = animationSpeed != null ? animationSpeed : 1000;
 
