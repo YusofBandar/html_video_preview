@@ -48,7 +48,6 @@ class ThumbnailHover {
     }
 
     addHoverListener(videoPreview) {
-        const self = this;
 
         const _thumbnailHover = () => {
             this.thumbnailHover(videoPreview);
@@ -56,7 +55,7 @@ class ThumbnailHover {
         }
 
         const _thumbnailTouch = () => {
-            requestAnimationFrame(self.timer.bind(self));
+            requestAnimationFrame(this.timer.bind(this));
             videoPreview.removeEventListener('touchstart', _thumbnailTouch);
         }
 
