@@ -16,16 +16,16 @@ Use the `<video-preview> </video-preview>` element with necessary attributes.
 
 ​	The URL of the video to preview.
 
-`thumbnail-frame`
+**`thumbnail-frame`**
 
  	The video frame used a thumbnail 
 
-`frames`
+**`frames`**
 
 ​	The video frames to preview on hover delimited by hover (e.g. 10,11,12,13). Warning
 ​	previewing too many frames causes performance issues.
 
-`frame-speed`
+**`frame-speed`**
 
    The speed, in milliseconds, to play through frames.
 
