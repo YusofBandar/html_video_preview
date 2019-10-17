@@ -174,7 +174,7 @@ class ThumbnailHover {
     }
 
     thumbnailAnimate(videoPreview, numFrames) {
-        let animationSpeed = videoPreview.getAttribute('animation-speed');
+        let animationSpeed = videoPreview.getAttribute('frame-speed');
         animationSpeed = animationSpeed != null ? animationSpeed : 1000;
 
         let i = 0;
