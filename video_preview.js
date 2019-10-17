@@ -77,27 +77,26 @@ class ThumbnailHover {
     }
 
     removeHoverListener(videoPreview, animationId) {
-        const self = this;
-
-        if (!this.mobileCheck()) {
-            videoPreview.addEventListener("mouseleave", function _thumbnailLeave() {
-                self.thumbnailLeave(videoPreview, animationId);
-                videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
-                self.addHoverListener(videoPreview);
-            });
-        } else {
-            videoPreview.addEventListener("touchend", function _thumbnailLeave() {
-                cancelAnimationFrame(self.timerID);
-                self.counter = 0;
-
-                self.thumbnailLeave(videoPreview, animationId);
-                videoPreview.removeEventListener("touchend", _thumbnailLeave);
-                self.addHoverListener(videoPreview);
-            });
-
+        const _thumbnailLeave = () => {
+            this.thumbnailLeave(videoPreview, animationId);
+            videoPreview.removeEventListener('mouseleave', _thumbnailLeave);
+            this.addHoverListener(videoPreview);
         }
 
+        const _thumbnailTouchEnd = () => {
+            cancelAnimationFrame(this.timerID);
+            this.counter = 0;
 
+            this.thumbnailLeave(videoPreview, animationId);
+            videoPreview.removeEventListener("touchend", _thumbnailTouchEnd);
+            this.addHoverListener(videoPreview);
+        }
+
+        if (!this.mobileCheck()) {
+            videoPreview.addEventListener("mouseleave", _thumbnailLeave);
+        } else {
+            videoPreview.addEventListener("touchend",_thumbnailTouchEnd);
+        }
     }
 
     thumbnailHover(videoPreview) {
