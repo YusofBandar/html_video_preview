@@ -1,6 +1,6 @@
 # html_video_preview
 
-Html_video_preview is JavaScript library to preview videos bypassing browsers auto-play block. Html_video_preview is light weight and has 0 dependencies.
+Html_video_preview is JavaScript library to preview videos bypassing browsers auto-play block. Html_video_preview is light weight and has 0 dependencies and works on both desktop and mobile.
 
 ## Example
 
